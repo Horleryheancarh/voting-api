@@ -29,6 +29,12 @@ export class RegisterDto {
   @ApiProperty({
     required: true,
   })
+  @IsString()
+  postcode: string;
+
+  @ApiProperty({
+    required: true,
+  })
   dateOfBirth: Date;
 
   @ApiProperty({

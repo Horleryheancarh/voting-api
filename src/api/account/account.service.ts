@@ -3,12 +3,17 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { v4 } from 'uuid';
-import { Accounts, AccountDocument } from 'src/database/models/Accounts.model';
+import {
+  Accounts,
+  AccountDocument,
+  Role,
+} from 'src/database/models/Accounts.model';
 import {
   ITokenPurpose,
   TokenDocument,
@@ -126,5 +131,20 @@ export class AccountService {
 
     if (account) throw new ConflictException('Username exists');
     return 'Username does not exist';
+  }
+
+  async makeAdmin(usernameDto: UsernameDto, role: Role): Promise<string> {
+    const account = await this.accountModel.findOne({
+      username: usernameDto.username,
+    });
+
+    if (!account) throw new NotFoundException('Account not Found');
+
+    if (role === Role.ADMIN)
+      throw new UnauthorizedException('Only an Admin can create Admin');
+
+    await account.updateOne({ role: Role.ADMIN });
+
+    return 'Made User Admin';
   }
 }

@@ -3,6 +3,11 @@ import { Document } from 'mongoose';
 
 export type AccountDocument = Accounts & Document;
 
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Schema({
   timestamps: true,
 })
@@ -26,6 +31,9 @@ export class Accounts {
 
   @Prop({ required: true })
   dateOfBirth: Date;
+
+  @Prop({ default: Role.USER })
+  role: Role;
 
   @Prop({ required: true })
   password: string;

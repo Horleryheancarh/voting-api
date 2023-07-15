@@ -65,4 +65,14 @@ export class AccountController {
 
     return new APIResponse<string>(status);
   }
+
+  @Put('usernames/:username')
+  async makeAdmin(
+    @Param() usernameDto: UsernameDto,
+    @AuthUser() user: Accounts,
+  ): Promise<APIResponse<string>> {
+    const status = await this.accountService.makeAdmin(usernameDto, user.role);
+
+    return new APIResponse<string>(status);
+  }
 }

@@ -26,9 +26,7 @@ export class RegisterDto {
   @IsString()
   lastName: string;
 
-  @ApiProperty({
-    required: true,
-  })
+  @ApiProperty()
   @IsString()
   postcode: string;
 

@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Accounts } from 'src/database/models/Accounts.model';
 import { AuthUser, Public } from 'src/decorators/auth';
 import { APIResponse } from 'src/types/APIResponse';
@@ -22,12 +22,18 @@ import { UsernameDto } from './dtos/UsernameDto';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
+  @ApiOperation({
+    summary: 'Get current user Profile',
+  })
   @Get('profile')
   @ApiBearerAuth()
   async getProfileById(@AuthUser() user: Accounts): Promise<Accounts> {
     return await this.accountService.getProfileById(user._id);
   }
 
+  @ApiOperation({
+    summary: 'Update current user Profile',
+  })
   @Put('profile')
   @ApiBearerAuth()
   async updateProfile(
@@ -41,6 +47,9 @@ export class AccountController {
     return new APIResponse<Accounts>(updatedAccount);
   }
 
+  @ApiOperation({
+    summary: 'Reset user password',
+  })
   @Post('reset_password')
   @HttpCode(200)
   @Public()
@@ -48,7 +57,9 @@ export class AccountController {
     await this.accountService.triggerResetPassword(resetPasswordDto);
   }
 
-  @Put('password')
+  @ApiOperation({
+    summary: 'Update user password',
+  })
   @Put('password')
   @HttpCode(200)
   @Public()
@@ -56,6 +67,9 @@ export class AccountController {
     await this.accountService.updatePassword(updatePasswordDto);
   }
 
+  @ApiOperation({
+    summary: 'Check if username is free',
+  })
   @Get('usernames/:username')
   @Public()
   async checkUsername(
@@ -66,7 +80,11 @@ export class AccountController {
     return new APIResponse<string>(status);
   }
 
+  @ApiOperation({
+    summary: 'Make user with {username} admin',
+  })
   @Put('usernames/:username')
+  @ApiBearerAuth()
   async makeAdmin(
     @Param() usernameDto: UsernameDto,
     @AuthUser() user: Accounts,

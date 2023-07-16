@@ -26,7 +26,7 @@ export class Accounts {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({})
   postcode: string;
 
   @Prop({ required: true })

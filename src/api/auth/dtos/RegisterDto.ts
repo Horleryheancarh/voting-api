@@ -52,7 +52,6 @@ export class RegisterDto {
     required: true,
     description: 'Unique username',
   })
-  @IsDefined()
   @IsString()
   @TransformToLowercase()
   username: string;

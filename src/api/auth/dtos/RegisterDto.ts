@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDefined,
   IsEmail,
+  IsOptional,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -28,6 +28,7 @@ export class RegisterDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   postcode: string;
 
   @ApiProperty({

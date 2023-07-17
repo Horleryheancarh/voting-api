@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDefined,
+  IsDateString,
   IsEmail,
   IsString,
   IsStrongPassword,
@@ -33,6 +33,7 @@ export class RegisterDto {
   @ApiProperty({
     required: true,
   })
+  @IsDateString()
   dateOfBirth: Date;
 
   @ApiProperty({

@@ -23,6 +23,7 @@ import { ResetPasswordDto } from './dtos/ResetPasswordDto';
 import { UpdatePasswordDto } from './dtos/UpdatePasswordDto';
 import { UpdateProfileDto } from './dtos/UpdateProfileDto';
 import { UsernameDto } from './dtos/UsernameDto';
+import { MailerService } from '../notification/mailer.service';
 
 @Injectable()
 export class AccountService {
@@ -30,6 +31,7 @@ export class AccountService {
     @InjectModel(Accounts.name)
     private readonly accountModel: Model<AccountDocument>,
     @InjectModel(Tokens.name) private readonly tokenModel: Model<TokenDocument>,
+    private readonly mailerService: MailerService,
   ) {}
 
   async getProfileById(userId: string) {
@@ -66,8 +68,9 @@ export class AccountService {
   }
 
   async triggerResetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { email } = resetPasswordDto;
     const account = await this.accountModel.findOne({
-      email: resetPasswordDto.email,
+      email,
     });
 
     if (!account) {
@@ -84,11 +87,15 @@ export class AccountService {
       purpose: ITokenPurpose.RESET_PASSWORD,
     });
 
+    const html = `<p>Reset your password with the ${token}</p>`;
+
     if (previousToken) {
       await previousToken.updateOne({
         token,
         expiresAt,
       });
+
+      await this.mailerService.sendEmail(email, 'Password Reset', html);
     } else {
       await this.tokenModel.create({
         userId: account.id,
@@ -96,6 +103,8 @@ export class AccountService {
         expiresAt,
         purpose: ITokenPurpose.RESET_PASSWORD,
       });
+
+      await this.mailerService.sendEmail(email, 'Password Reset', html);
     }
   }
 

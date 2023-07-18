@@ -4,6 +4,7 @@ import { AccountModel, Accounts } from 'src/database/models/Accounts.model';
 import { TokenModel, Tokens } from 'src/database/models/Tokens.model';
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
+import { MailerService } from '../notification/mailer.service';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { AccountService } from './account.service';
     ]),
   ],
   controllers: [AccountController],
-  providers: [AccountService],
+  providers: [AccountService, MailerService],
 })
 export class AccountModule {}

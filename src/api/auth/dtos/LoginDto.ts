@@ -3,6 +3,7 @@ import { Length, IsString } from 'class-validator';
 
 export class LoginDto {
   @ApiProperty({
+    example: 'johndoe',
     required: true,
     description: 'Email or Username',
     default: 'Email or Username',
@@ -11,6 +12,7 @@ export class LoginDto {
   identifier: string;
 
   @ApiProperty({
+    example: 'P@ssw07d',
     required: true,
   })
   @IsString()

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -6,8 +7,15 @@ import {
   Param,
   Post,
   Put,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Accounts } from 'src/database/models/Accounts.model';
 import { AuthUser, Public } from 'src/decorators/auth';
 import { APIResponse } from 'src/types/APIResponse';
@@ -17,6 +25,14 @@ import { UpdatePasswordDto } from './dtos/UpdatePasswordDto';
 import { UpdateProfileDto } from './dtos/UpdateProfileDto';
 import { UsernameDto } from './dtos/UsernameDto';
 
+@ApiBadRequestResponse({
+  description: 'Bad request Response',
+  type: BadRequestException,
+})
+@ApiUnauthorizedResponse({
+  description: 'Unathorized',
+  type: UnauthorizedException,
+})
 @Controller('accounts')
 @ApiTags('Account')
 export class AccountController {

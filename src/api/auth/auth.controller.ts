@@ -1,5 +1,21 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  BadRequestException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiUnauthorizedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 import { Public } from 'src/decorators/auth';
 import { APIResponse } from 'src/types/APIResponse';
 import { AuthService } from './auth.service';
@@ -7,6 +23,18 @@ import { AuthenticatedAccountDto } from './dtos/AuthenticatedAccountDto';
 import { LoginDto } from './dtos/LoginDto';
 import { RegisterDto } from './dtos/RegisterDto';
 
+@ApiBadRequestResponse({
+  description: 'Bad request Response',
+  type: BadRequestException,
+})
+@ApiUnauthorizedResponse({
+  description: 'Unathorized',
+  type: UnauthorizedException,
+})
+@ApiNotFoundResponse({
+  description: 'Not Found',
+  type: NotFoundException,
+})
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
@@ -14,6 +42,10 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Register new user',
+  })
+  @ApiCreatedResponse({
+    description: 'Success',
+    type: AuthenticatedAccountDto,
   })
   @Post('register')
   @Public()
@@ -30,6 +62,10 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Login user',
+  })
+  @ApiOkResponse({
+    description: 'Success',
+    type: AuthenticatedAccountDto,
   })
   @Post('login')
   @HttpCode(200)

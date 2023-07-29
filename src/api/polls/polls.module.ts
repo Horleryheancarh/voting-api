@@ -4,6 +4,7 @@ import { PollController } from './polls.controller';
 import { PollService } from './polls.service';
 import { Module } from '@nestjs/common';
 import { OptionModel, Options } from 'src/database/models/Options.model';
+import { AccountModel, Accounts } from 'src/database/models/Accounts.model';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { OptionModel, Options } from 'src/database/models/Options.model';
       {
         name: Options.name,
         schema: OptionModel,
+      },
+      {
+        name: Accounts.name,
+        schema: AccountModel,
       },
     ]),
   ],

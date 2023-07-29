@@ -18,7 +18,7 @@ import {
 import { PollService } from './polls.service';
 import { AuthUser } from 'src/decorators/auth';
 import { Accounts } from 'src/database/models/Accounts.model';
-import { CreatePollDto } from './dtos/CreatePollDto';
+import { CreatePollDto, CreatePollOptionsDto } from './dtos/CreatePollDto';
 import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
 import { GetSinglePollDto } from './dtos/GetPollDto';
@@ -48,6 +48,20 @@ export class PollController {
     const poll = await this.pollService.createPoll(user, body);
 
     return new APIResponse<Polls>(poll);
+  }
+
+  @ApiOperation({
+    summary: 'Add Poll Options',
+  })
+  @Post(':id')
+  async createPollOptions(
+    @AuthUser() user: Accounts,
+    @Param() param: GetSinglePollDto,
+    @Body() body: CreatePollOptionsDto,
+  ): Promise<APIResponse<object>> {
+    const poll = await this.pollService.createPollOptions(user, param, body);
+
+    return new APIResponse<object>(poll);
   }
 
   @ApiOperation({

@@ -7,7 +7,7 @@ export type PollDocument = Polls & Document;
   timestamps: true,
 })
 export class Polls {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   title: string;
 
   @Prop({ required: true })

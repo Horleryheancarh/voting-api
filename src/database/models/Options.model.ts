@@ -9,19 +9,17 @@ export type OptionDocument = Options & Document;
   timestamps: true,
 })
 export class Options {
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Polls',
-  })
+  @Prop({ type: String })
+  optionText: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Polls' })
   pollId: Polls;
 
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Accounts',
-  })
-  option: Accounts;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Accounts' })
+  contestant: Accounts;
+
+  @Prop({ type: Number, default: 0 })
+  voteCount: number;
 }
 
-export const OptionModel = SchemaFactory.createForClass(Polls);
+export const OptionModel = SchemaFactory.createForClass(Options);

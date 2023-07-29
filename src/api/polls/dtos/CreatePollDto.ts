@@ -31,16 +31,23 @@ export class CreatePollDto {
 export class CreatePollOptionsDto {
   @ApiProperty({
     required: true,
-    description: 'Poll Id',
+    description: 'Contestant details',
   })
-  @IsMongoId()
-  pollId: string;
+  @IsArray()
+  option: Array<Option>;
+}
 
+export class Option {
   @ApiProperty({
     required: true,
     description: 'Contestant UserId',
   })
-  @IsArray()
   @IsMongoId()
-  option: Array<string>;
+  contestant: string;
+
+  @ApiProperty({
+    required: true,
+    description: 'Party or Philosophy',
+  })
+  optionText: string;
 }

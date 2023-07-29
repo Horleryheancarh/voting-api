@@ -1,5 +1,20 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UnauthorizedException,
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { PollService } from './polls.service';
 import { AuthUser } from 'src/decorators/auth';
 import { Accounts } from 'src/database/models/Accounts.model';
@@ -8,6 +23,14 @@ import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
 import { GetSinglePollDto } from './dtos/GetPollDto';
 
+@ApiBadRequestResponse({
+  description: 'Bad request Response',
+  type: BadRequestException,
+})
+@ApiUnauthorizedResponse({
+  description: 'Unathorized',
+  type: UnauthorizedException,
+})
 @Controller('polls')
 @ApiTags('Poll')
 @ApiBearerAuth()
@@ -28,10 +51,22 @@ export class PollController {
   }
 
   @ApiOperation({
-    summary: 'Get all Polls',
+    summary: 'Get active Polls',
   })
-  @Get('')
-  async getPolls(
+  @Get('/active')
+  async getActivePolls(
+    @Query() query: Partial<CreatePollDto>,
+  ): Promise<APIResponse<Array<Polls>>> {
+    const polls = await this.pollService.getPolls(query);
+
+    return new APIResponse<Array<Polls>>(polls);
+  }
+
+  @ApiOperation({
+    summary: 'Get Upcoming Polls',
+  })
+  @Get('/upcoming')
+  async getUpcomingolls(
     @Query() query: Partial<CreatePollDto>,
   ): Promise<APIResponse<Array<Polls>>> {
     const polls = await this.pollService.getPolls(query);

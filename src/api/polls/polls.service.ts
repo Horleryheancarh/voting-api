@@ -37,12 +37,23 @@ export class PollService {
     return poll;
   }
 
-  async getPolls(query: Partial<CreatePollDto>) {
+  async getActivePolls(query: Partial<CreatePollDto>) {
     const now = new Date();
     const polls = await this.pollModel.find({
       ...query,
       startAt: { $lt: now },
       stopAt: { $gt: now },
+    });
+    if (polls.length === 0) throw new NotFoundException('No Polls Found');
+
+    return polls;
+  }
+
+  async getUpcomingPolls(query: Partial<CreatePollDto>) {
+    const now = new Date();
+    const polls = await this.pollModel.find({
+      ...query,
+      startAt: { $gt: now },
     });
     if (polls.length === 0) throw new NotFoundException('No Polls Found');
 

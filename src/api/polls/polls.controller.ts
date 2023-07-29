@@ -57,7 +57,7 @@ export class PollController {
   async getActivePolls(
     @Query() query: Partial<CreatePollDto>,
   ): Promise<APIResponse<Array<Polls>>> {
-    const polls = await this.pollService.getPolls(query);
+    const polls = await this.pollService.getActivePolls(query);
 
     return new APIResponse<Array<Polls>>(polls);
   }
@@ -69,7 +69,7 @@ export class PollController {
   async getUpcomingolls(
     @Query() query: Partial<CreatePollDto>,
   ): Promise<APIResponse<Array<Polls>>> {
-    const polls = await this.pollService.getPolls(query);
+    const polls = await this.pollService.getUpcomingPolls(query);
 
     return new APIResponse<Array<Polls>>(polls);
   }

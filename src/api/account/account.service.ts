@@ -156,4 +156,14 @@ export class AccountService {
 
     return 'Made User Admin';
   }
+
+  async searchUser(usernameDto: UsernameDto): Promise<Accounts> {
+    const account = await this.accountModel.findOne({
+      username: usernameDto.username,
+    });
+
+    if (!account) throw new NotFoundException('Account not Found');
+
+    return account;
+  }
 }

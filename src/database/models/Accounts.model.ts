@@ -27,7 +27,7 @@ export class Accounts {
   email: string;
 
   @Prop({})
-  postcode: string;
+  state: string;
 
   @Prop({ required: true })
   dateOfBirth: Date;

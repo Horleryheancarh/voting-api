@@ -18,10 +18,15 @@ import {
 import { PollService } from './polls.service';
 import { AuthUser } from 'src/decorators/auth';
 import { Accounts } from 'src/database/models/Accounts.model';
-import { CreatePollDto, CreatePollOptionsDto } from './dtos/CreatePollDto';
+import {
+  CreatePollDto,
+  CreatePollOptionsDto,
+  OptionDto,
+} from './dtos/CreatePollDto';
 import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
-import { GetSinglePollDto } from './dtos/GetPollDto';
+import { GetSinglePollDto, GetSinglePollOptionDto } from './dtos/GetPollDto';
+import { Options } from 'src/database/models/Options.model';
 
 @ApiBadRequestResponse({
   description: 'Bad request Response',
@@ -51,20 +56,6 @@ export class PollController {
   }
 
   @ApiOperation({
-    summary: 'Add Poll Options',
-  })
-  @Post(':id')
-  async createPollOptions(
-    @AuthUser() user: Accounts,
-    @Param() param: GetSinglePollDto,
-    @Body() body: CreatePollOptionsDto,
-  ): Promise<APIResponse<object>> {
-    const poll = await this.pollService.createPollOptions(user, param, body);
-
-    return new APIResponse<object>(poll);
-  }
-
-  @ApiOperation({
     summary: 'Get active Polls',
   })
   @Get('/active')
@@ -86,6 +77,47 @@ export class PollController {
     const polls = await this.pollService.getUpcomingPolls(query);
 
     return new APIResponse<Array<Polls>>(polls);
+  }
+
+  @ApiOperation({
+    summary: 'Add Poll Options',
+  })
+  @Post(':id/option')
+  async createPollOptions(
+    @AuthUser() user: Accounts,
+    @Param() param: GetSinglePollDto,
+    @Body() body: CreatePollOptionsDto,
+  ): Promise<APIResponse<object>> {
+    const poll = await this.pollService.createPollOptions(user, param, body);
+
+    return new APIResponse<object>(poll);
+  }
+
+  @ApiOperation({
+    summary: 'Edit Poll Options',
+  })
+  @Post(':id/option/:optionId')
+  async updatePollOptions(
+    @AuthUser() user: Accounts,
+    @Param() param: GetSinglePollOptionDto,
+    @Body() body: Partial<OptionDto>,
+  ): Promise<APIResponse<object>> {
+    const poll = await this.pollService.updatePollOptions(user, param, body);
+
+    return new APIResponse<object>(poll);
+  }
+
+  @ApiOperation({
+    summary: 'Delete Single Poll Option',
+  })
+  @Post(':id/option/:optionId')
+  async deletePollOptions(
+    @AuthUser() user: Accounts,
+    @Param() param: GetSinglePollOptionDto,
+  ): Promise<APIResponse<Options>> {
+    const poll = await this.pollService.deletePollOption(user, param);
+
+    return new APIResponse<Options>(poll);
   }
 
   @ApiOperation({

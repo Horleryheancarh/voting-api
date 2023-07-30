@@ -34,10 +34,10 @@ export class CreatePollOptionsDto {
     description: 'Contestant details',
   })
   @IsArray()
-  option: Array<Option>;
+  option: Array<OptionDto>;
 }
 
-export class Option {
+export class OptionDto {
   @ApiProperty({
     required: true,
     description: 'Contestant UserId',

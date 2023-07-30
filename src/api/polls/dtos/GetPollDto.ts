@@ -10,3 +10,21 @@ export class GetSinglePollDto {
   @IsMongoId()
   id: string;
 }
+
+export class GetSinglePollOptionDto {
+  @ApiProperty({
+    required: true,
+    description: 'Poll unique id',
+    example: '',
+  })
+  @IsMongoId()
+  id: string;
+
+  @ApiProperty({
+    required: true,
+    description: 'Poll unique id',
+    example: '',
+  })
+  @IsMongoId()
+  optionId: string;
+}

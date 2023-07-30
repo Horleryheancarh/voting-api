@@ -12,12 +12,7 @@ import {
   Accounts,
   Role,
 } from 'src/database/models/Accounts.model';
-import {
-  CreatePollDto,
-  CreatePollOptionsDto,
-  OptionDto,
-} from './dtos/CreatePollDto';
-import { GetSinglePollDto, GetSinglePollOptionDto } from './dtos/GetPollDto';
+import { CreatePollDto } from './dtos/CreatePollDto';
 
 @Injectable()
 export class PollService {
@@ -74,7 +69,10 @@ export class PollService {
     return { poll, options };
   }
 
-  async editPoll(pollId: string, data: Partial<CreatePollDto>) {
+  async editPoll(user: Accounts, pollId: string, data: Partial<CreatePollDto>) {
+    if (user.role !== Role.ADMIN)
+      throw new UnauthorizedException('Unauthorized Operation');
+
     if (!(await this.pollModel.findById(pollId)))
       throw new NotFoundException('Poll Not Found');
 
@@ -83,67 +81,13 @@ export class PollService {
     return poll;
   }
 
-  async deletePoll(pollId: string) {
+  async deletePoll(user: Accounts, pollId: string) {
+    if (user.role !== Role.ADMIN)
+      throw new UnauthorizedException('Unauthorized Operation');
+
     if (!(await this.pollModel.findById(pollId)))
       throw new NotFoundException('Poll Not Found');
 
     await this.pollModel.findByIdAndDelete(pollId);
-  }
-
-  async createPollOptions(
-    user: Accounts,
-    pollId: GetSinglePollDto,
-    option: CreatePollOptionsDto,
-  ) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
-    if (!(await this.pollModel.findById(pollId.id)))
-      throw new NotFoundException('Poll Not Found');
-
-    const options = option.option.map(({ contestant, optionText }) => {
-      return { pollId: pollId.id, contestant, optionText };
-    });
-
-    const polls = await this.optionModel.create(options);
-
-    return polls;
-  }
-
-  async updatePollOptions(
-    user: Accounts,
-    param: GetSinglePollOptionDto,
-    option: Partial<OptionDto>,
-  ) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
-    const { optionId } = param;
-    if (!(await this.pollModel.findById(optionId)))
-      throw new NotFoundException('Poll Not Found');
-
-    const pollOption = await this.pollModel.findByIdAndUpdate(
-      optionId,
-      option,
-      {
-        new: true,
-      },
-    );
-
-    return pollOption;
-  }
-
-  async deletePollOption(user: Accounts, param: GetSinglePollOptionDto) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
-    const { optionId } = param;
-
-    if (!(await this.optionModel.findById(optionId)))
-      throw new NotFoundException('Poll Option Not Found');
-
-    const pollOption = await this.optionModel.findByIdAndDelete(optionId);
-
-    return pollOption;
   }
 }

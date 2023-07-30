@@ -5,6 +5,7 @@ import { PollService } from './polls.service';
 import { Module } from '@nestjs/common';
 import { OptionModel, Options } from 'src/database/models/Options.model';
 import { AccountModel, Accounts } from 'src/database/models/Accounts.model';
+import { OptionService } from './options.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { AccountModel, Accounts } from 'src/database/models/Accounts.model';
     ]),
   ],
   controllers: [PollController],
-  providers: [PollService],
+  providers: [PollService, OptionService],
 })
 export class PollModule {}

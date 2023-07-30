@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './api/auth/jwt.auth.guard';
 import { HealthModule } from './api/health/health.module';
 import { AccountModule } from './api/account/account.module';
 import { PollModule } from './api/polls/polls.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PollModule } from './api/polls/polls.module';
     AuthModule,
     AccountModule,
     PollModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [],
   providers: [

@@ -29,7 +29,9 @@ import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
 import { GetSinglePollDto, GetSinglePollOptionDto } from './dtos/GetPollDto';
 import { Options } from 'src/database/models/Options.model';
-import { OptionService } from './options.service';
+import { OptionService } from '../options/options.service';
+import { VoteService } from '../options/vote.service';
+import { CreateVoteDto } from '../options/dtos/CreateVoteDto';
 
 @ApiBadRequestResponse({
   description: 'Bad request Response',
@@ -46,6 +48,7 @@ export class PollController {
   constructor(
     private readonly pollService: PollService,
     private readonly optionService: OptionService,
+    private readonly voteService: VoteService,
   ) {}
 
   @ApiOperation({
@@ -195,6 +198,19 @@ export class PollController {
     @Param() param: GetSinglePollOptionDto,
   ): Promise<APIResponse<Options>> {
     const poll = await this.optionService.deletePollOption(user, param);
+
+    return new APIResponse<Options>(poll);
+  }
+
+  @ApiOperation({
+    summary: 'Vote Your candidate',
+  })
+  @Delete(':id/option/:optionId')
+  async vote(
+    @AuthUser() user: Accounts,
+    @Body() body: CreateVoteDto,
+  ): Promise<APIResponse<Options>> {
+    const poll = await this.voteService.voteContestant(user._id, body);
 
     return new APIResponse<Options>(poll);
   }

@@ -8,8 +8,11 @@ import { Model } from 'mongoose';
 import { Accounts, Role } from 'src/database/models/Accounts.model';
 import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { PollDocument, Polls } from 'src/database/models/Polls.model';
-import { CreatePollOptionsDto, OptionDto } from './dtos/CreatePollDto';
-import { GetSinglePollDto, GetSinglePollOptionDto } from './dtos/GetPollDto';
+import { CreatePollOptionsDto, OptionDto } from '../polls/dtos/CreatePollDto';
+import {
+  GetSinglePollDto,
+  GetSinglePollOptionDto,
+} from '../polls/dtos/GetPollDto';
 
 @Injectable()
 export class OptionService {

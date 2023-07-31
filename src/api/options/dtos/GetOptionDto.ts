@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsMongoId } from 'class-validator';
 
-export class GetSinglePollDto {
+export class GetSinglePollOptionDto {
   @ApiProperty({
     required: true,
     description: 'Poll unique id',
@@ -9,4 +9,12 @@ export class GetSinglePollDto {
   })
   @IsMongoId()
   id: string;
+
+  @ApiProperty({
+    required: true,
+    description: 'Poll unique id',
+    example: '',
+  })
+  @IsMongoId()
+  optionId: string;
 }

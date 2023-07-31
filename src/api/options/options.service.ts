@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,11 +9,9 @@ import { Model } from 'mongoose';
 import { Accounts, Role } from 'src/database/models/Accounts.model';
 import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { PollDocument, Polls } from 'src/database/models/Polls.model';
-import { CreatePollOptionsDto, OptionDto } from '../polls/dtos/CreatePollDto';
-import {
-  GetSinglePollDto,
-  GetSinglePollOptionDto,
-} from '../polls/dtos/GetPollDto';
+import { CreatePollOptionsDto, OptionDto } from './dtos/CreateOptionDto';
+import { GetSinglePollOptionDto } from './dtos/GetOptionDto';
+import { GetSinglePollDto } from '../polls/dtos/GetPollDto';
 
 @Injectable()
 export class OptionService {
@@ -37,6 +36,13 @@ export class OptionService {
     const options = option.option.map(({ contestant, optionText }) => {
       return { pollId: pollId.id, contestant, optionText };
     });
+
+    for (const m of options) {
+      if (await this.optionModel.findOne(m))
+        throw new NotAcceptableException(
+          `${m.contestant} already running for a post`,
+        );
+    }
 
     const polls = await this.optionModel.create(options);
 

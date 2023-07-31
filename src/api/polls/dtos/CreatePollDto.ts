@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsMongoId, IsString } from 'class-validator';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsDateString, IsString } from 'class-validator';
 
 // Poll validation DTO
 export class CreatePollDto {
@@ -28,26 +28,4 @@ export class CreatePollDto {
   stopAt: Date;
 }
 
-export class CreatePollOptionsDto {
-  @ApiProperty({
-    required: true,
-    description: 'Contestant details',
-  })
-  @IsArray()
-  option: Array<OptionDto>;
-}
-
-export class OptionDto {
-  @ApiProperty({
-    required: true,
-    description: 'Contestant UserId',
-  })
-  @IsMongoId()
-  contestant: string;
-
-  @ApiProperty({
-    required: true,
-    description: 'Party or Philosophy',
-  })
-  optionText: string;
-}
+export class UpdatePollDto extends PartialType(CreatePollDto) {}

@@ -64,7 +64,7 @@ export class PollService {
 
     const options = await this.optionModel
       .find({ pollId })
-      .populate({ path: 'option', select: '-password' });
+      .populate({ path: 'contestant', select: '-password' });
 
     return { poll, options };
   }
@@ -76,7 +76,9 @@ export class PollService {
     if (!(await this.pollModel.findById(pollId)))
       throw new NotFoundException('Poll Not Found');
 
-    const poll = await this.pollModel.findByIdAndUpdate(pollId, data);
+    const poll = await this.pollModel.findByIdAndUpdate(pollId, data, {
+      new: true,
+    });
 
     return poll;
   }

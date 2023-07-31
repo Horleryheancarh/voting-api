@@ -7,6 +7,8 @@ import { HealthModule } from './api/health/health.module';
 import { AccountModule } from './api/account/account.module';
 import { PollModule } from './api/polls/polls.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { OptionModule } from './api/options/options.module';
+import { VoteModule } from './api/vote/vote.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AuthModule,
     AccountModule,
     PollModule,
+    OptionModule,
+    VoteModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [],

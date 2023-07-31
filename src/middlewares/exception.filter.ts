@@ -17,6 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
     const req = ctx.getRequest();
+    const res = ctx.getResponse();
     const cause = exception.cause;
     const status =
       exception instanceof HttpException
@@ -32,9 +33,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       cause,
     };
 
+    res.header('statusText', exception.message);
+
     if (status == HttpStatus.INTERNAL_SERVER_ERROR)
       this.logger.error({ exception, email });
 
-    httpAdapter.reply(ctx.getResponse(), response, status);
+    httpAdapter.reply(res, response, status);
   }
 }

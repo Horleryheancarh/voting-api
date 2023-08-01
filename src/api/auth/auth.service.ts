@@ -2,6 +2,7 @@ import {
   BadRequestException,
   UnauthorizedException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -53,7 +54,7 @@ export class AuthService {
       $or: [{ email: identifier }, { username: identifier }],
     });
 
-    if (!account) throw new UnauthorizedException('Email does not exist');
+    if (!account) throw new NotFoundException('Email or Username not found');
     if (!bcrypt.compareSync(password, account.password)) {
       throw new UnauthorizedException('Incorrect password');
     }

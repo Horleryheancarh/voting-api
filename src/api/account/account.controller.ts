@@ -109,4 +109,17 @@ export class AccountController {
 
     return new APIResponse<string>(status);
   }
+
+  @ApiOperation({
+    summary: 'Search user with {username}',
+  })
+  @Put('search/:username')
+  @ApiBearerAuth()
+  async searchUser(
+    @Param() usernameDto: UsernameDto,
+  ): Promise<APIResponse<Accounts>> {
+    const account = await this.accountService.searchUser(usernameDto);
+
+    return new APIResponse<Accounts>(account);
+  }
 }

@@ -6,6 +6,7 @@ import {
   IsString,
   IsStrongPassword,
   IsPostalCode,
+  IsLocale,
 } from 'class-validator';
 import { TransformToLowercase } from 'src/decorators/transformers';
 
@@ -38,9 +39,9 @@ export class RegisterDto {
     example: '111101',
     description: 'Users post code',
   })
-  @IsPostalCode()
+  @IsString()
   @IsOptional()
-  postcode: string;
+  state: string;
 
   @ApiProperty({
     example: '1010-10-10',

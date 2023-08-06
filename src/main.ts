@@ -5,6 +5,7 @@ import { PORT } from './config';
 import { HttpExceptionFilter } from './middlewares/exception.filter';
 import { loggerInstance } from './middlewares/logger';
 import { ValidationPipe } from '@nestjs/common';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -22,6 +23,7 @@ async function bootstrap() {
 
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new HttpExceptionFilter(httpAdapter));
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   const config = new DocumentBuilder()
     .setTitle('Voting API')
@@ -35,5 +37,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
   await app.listen(PORT);
+  console.log(`Application is running on ${await app.getUrl()}`);
 }
 bootstrap();

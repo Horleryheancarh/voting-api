@@ -5,8 +5,6 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
-  IsPostalCode,
-  IsLocale,
 } from 'class-validator';
 import { TransformToLowercase } from 'src/decorators/transformers';
 

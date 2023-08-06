@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { VoteDocument, Votes } from 'src/database/models/Votes.model';
 import { CreateVoteDto } from './dtos/CreateVoteDto';
+import { Accounts } from 'src/database/models/Accounts.model';
 
 @Injectable()
 export class VoteService {
@@ -16,19 +17,28 @@ export class VoteService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async voteContestant(userId: string, data: CreateVoteDto) {
-    if (await this.voteModel.findOne({ userId, pollId: data.pollId }))
+  async voteContestant(user: Accounts, data: CreateVoteDto) {
+    const { pollId, optionId } = data;
+
+    if (await this.voteModel.findOne({ userId: user._id, pollId }))
       throw new NotAcceptableException('You already voted in this poll');
 
-    await this.voteModel.create({ userId, ...data });
+    await this.voteModel.create({ userId: user._id, ...data });
 
     const option = await this.optionModel
-      .findByIdAndUpdate(data.optionId, {
-        $inc: { voteCount: 1 },
-      })
+      .findOneAndUpdate(
+        { pollId, _id: optionId },
+        {
+          $inc: { voteCount: 1 },
+        },
+        {
+          new: true,
+        },
+      )
       .populate({ path: 'contestant', select: '-password' });
 
-    this.eventEmitter.emit('newVote', option);
+    const text = `${user.firstName} voted ${option.contestant.firstName}`;
+    this.eventEmitter.emit('vote.new', text);
     return option;
   }
 }

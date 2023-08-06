@@ -22,7 +22,7 @@ export class VoteGateway
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: any) {
+  afterInit() {
     console.log('Websocket server initialized');
   }
 

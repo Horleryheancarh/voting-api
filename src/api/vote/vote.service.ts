@@ -6,6 +6,7 @@ import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { VoteDocument, Votes } from 'src/database/models/Votes.model';
 import { CreateVoteDto } from './dtos/CreateVoteDto';
 import { Accounts } from 'src/database/models/Accounts.model';
+import { GetSinglePollDto } from '../polls/dtos/GetPollDto';
 
 @Injectable()
 export class VoteService {
@@ -40,5 +41,11 @@ export class VoteService {
     const text = `${user.firstName} voted ${option.contestant.firstName}`;
     this.eventEmitter.emit('vote.new', text);
     return option;
+  }
+
+  async checkVote(userId: string, data: GetSinglePollDto) {
+    if (await this.voteModel.findOne({ userId, pollId: data.id })) return true;
+
+    return false;
   }
 }

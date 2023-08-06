@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, UsePipes } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -18,6 +18,19 @@ import { BadRequestDto, NotFoundDto, UnathorizedDto } from 'src/types/ErrorDto';
 
 @Controller('auth')
 @ApiTags('Auth')
+@ApiBadRequestResponse({
+  status: 400,
+  description: 'Bad Request',
+  type: BadRequestDto,
+})
+@ApiUnauthorizedResponse({
+  description: 'Unathorized',
+  type: UnathorizedDto,
+})
+@ApiNotFoundResponse({
+  description: 'Not Found',
+  type: NotFoundDto,
+})
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -27,19 +40,6 @@ export class AuthController {
   @ApiCreatedResponse({
     description: 'Success',
     type: AuthenticatedAccountDto,
-  })
-  @ApiBadRequestResponse({
-    status: 400,
-    description: 'Bad request Response',
-    type: BadRequestDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unathorized',
-    type: UnathorizedDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Not Found',
-    type: NotFoundDto,
   })
   @Post('register')
   @Public()
@@ -60,19 +60,6 @@ export class AuthController {
   @ApiOkResponse({
     description: 'Success',
     type: AuthenticatedAccountDto,
-  })
-  @ApiBadRequestResponse({
-    status: 400,
-    description: 'Bad Request',
-    type: BadRequestDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unathorized',
-    type: UnathorizedDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Not Found',
-    type: NotFoundDto,
   })
   @Post('login')
   @HttpCode(200)

@@ -4,6 +4,7 @@ import { VoteModel, Votes } from 'src/database/models/Votes.model';
 import { OptionModel, Options } from 'src/database/models/Options.model';
 import { VoteController } from './vote.controller';
 import { VoteService } from './vote.service';
+import { VoteGateway } from './vote.gateway';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { VoteService } from './vote.service';
     ]),
   ],
   controllers: [VoteController],
-  providers: [VoteService],
+  providers: [VoteService, VoteGateway],
 })
 export class VoteModule {}

@@ -3,7 +3,6 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -148,9 +147,6 @@ export class AccountService {
     });
 
     if (!account) throw new NotFoundException('Account not Found');
-
-    if (role === Role.ADMIN)
-      throw new UnauthorizedException('Only an Admin can create Admin');
 
     await account.updateOne({ role: Role.ADMIN });
 

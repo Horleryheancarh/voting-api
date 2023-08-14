@@ -44,11 +44,7 @@ export class PollController {
   })
   @Post()
   // @RequiresAdminRole()
-  async createPoll(
-    @AuthUser() user: Accounts,
-    @Body() body: CreatePollDto,
-  ): Promise<APIResponse<Polls>> {
-    console.log(user);
+  async createPoll(@Body() body: CreatePollDto): Promise<APIResponse<Polls>> {
     const poll = await this.pollService.createPoll(body);
 
     return new APIResponse<Polls>(poll);

@@ -17,7 +17,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Accounts } from 'src/database/models/Accounts.model';
-import { AuthUser, Public } from 'src/decorators/auth';
+import { AuthUser, Public, RequiresAdminRole } from 'src/decorators/auth';
 import { APIResponse } from 'src/types/APIResponse';
 import { AccountService } from './account.service';
 import { ResetPasswordDto } from './dtos/ResetPasswordDto';
@@ -100,7 +100,7 @@ export class AccountController {
     summary: 'Make user with {username} admin',
   })
   @Put('usernames/:username')
-  @ApiBearerAuth()
+  @RequiresAdminRole()
   async makeAdmin(
     @Param() usernameDto: UsernameDto,
     @AuthUser() user: Accounts,

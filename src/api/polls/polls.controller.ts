@@ -18,12 +18,12 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { PollService } from './polls.service';
-import { AuthUser } from 'src/decorators/auth';
-import { Accounts } from 'src/database/models/Accounts.model';
 import { CreatePollDto, UpdatePollDto } from './dtos/CreatePollDto';
 import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
 import { GetSinglePollDto } from './dtos/GetPollDto';
+import { AuthUser, RequiresAdminRole } from 'src/decorators/auth';
+import { Accounts } from 'src/database/models/Accounts.model';
 
 @ApiBadRequestResponse({
   description: 'Bad request Response',
@@ -42,26 +42,40 @@ export class PollController {
   @ApiOperation({
     summary: 'Create New Poll',
   })
-  @Post('')
+  @Post()
+  // @RequiresAdminRole()
   async createPoll(
     @AuthUser() user: Accounts,
     @Body() body: CreatePollDto,
   ): Promise<APIResponse<Polls>> {
-    const poll = await this.pollService.createPoll(user, body);
+    console.log(user);
+    const poll = await this.pollService.createPoll(body);
 
     return new APIResponse<Polls>(poll);
+  }
+
+  @ApiOperation({
+    summary: 'Get all Polls',
+  })
+  @Get('/')
+  async getAllPolls(
+    @Query() query: UpdatePollDto,
+  ): Promise<APIResponse<Array<Polls>>> {
+    const polls = await this.pollService.getAllPolls(query);
+
+    return new APIResponse<Array<Polls>>(polls);
   }
 
   @ApiOperation({
     summary: 'Update Poll',
   })
   @Put(':id')
+  // @RequiresAdminRole()
   async updatePoll(
-    @AuthUser() user: Accounts,
     @Param() param: GetSinglePollDto,
     @Body() body: UpdatePollDto,
   ): Promise<APIResponse<Polls>> {
-    const poll = await this.pollService.editPoll(user, param.id, body);
+    const poll = await this.pollService.editPoll(param.id, body);
 
     return new APIResponse<Polls>(poll);
   }
@@ -94,6 +108,7 @@ export class PollController {
     summary: 'Get single poll and its options',
   })
   @Get(':id')
+  // @RequiresAdminRole()
   async getSinglePoll(
     @Param() param: GetSinglePollDto,
   ): Promise<APIResponse<object>> {
@@ -106,11 +121,11 @@ export class PollController {
     summary: 'Get single poll and its options',
   })
   @Delete(':id')
+  // @RequiresAdminRole()
   async deleteSinglePoll(
-    @AuthUser() user: Accounts,
     @Param() param: GetSinglePollDto,
   ): Promise<APIResponse<string>> {
-    await this.pollService.deletePoll(user, param.id);
+    await this.pollService.deletePoll(param.id);
 
     return new APIResponse<string>('Poll deleted');
   }

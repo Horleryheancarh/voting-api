@@ -2,11 +2,9 @@ import {
   Injectable,
   NotAcceptableException,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Accounts, Role } from 'src/database/models/Accounts.model';
 import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { PollDocument, Polls } from 'src/database/models/Polls.model';
 import { CreatePollOptionsDto, OptionDto } from './dtos/CreateOptionDto';
@@ -23,13 +21,9 @@ export class OptionService {
   ) {}
 
   async createPollOptions(
-    user: Accounts,
     pollId: GetSinglePollDto,
     option: CreatePollOptionsDto,
   ) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
     if (!(await this.pollModel.findById(pollId.id)))
       throw new NotFoundException('Poll Not Found');
 
@@ -71,13 +65,9 @@ export class OptionService {
   }
 
   async updatePollOptions(
-    user: Accounts,
     param: GetSinglePollOptionDto,
     option: Partial<OptionDto>,
   ) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
     const { optionId } = param;
     const pollOption = await this.optionModel.findByIdAndUpdate(
       optionId,
@@ -92,10 +82,7 @@ export class OptionService {
     return pollOption;
   }
 
-  async deletePollOption(user: Accounts, param: GetSinglePollOptionDto) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
+  async deletePollOption(param: GetSinglePollOptionDto) {
     const { optionId } = param;
 
     if (!(await this.optionModel.findById(optionId)))

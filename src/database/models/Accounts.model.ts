@@ -32,7 +32,7 @@ export class Accounts {
   @Prop({ required: true })
   dateOfBirth: Date;
 
-  @Prop({ default: Role.USER })
+  @Prop({ default: Role.USER, enum: Role })
   role: Role;
 
   @Prop({ required: true })

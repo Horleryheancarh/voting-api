@@ -66,6 +66,7 @@ export class AuthService {
       lastName: account.lastName,
       email: account.email,
       username: account.username,
+      role: account.role,
     } as Accounts;
   }
 

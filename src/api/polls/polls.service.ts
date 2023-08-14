@@ -1,17 +1,8 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { OptionDocument, Options } from 'src/database/models/Options.model';
 import { PollDocument, Polls } from 'src/database/models/Polls.model';
-import {
-  AccountDocument,
-  Accounts,
-  Role,
-} from 'src/database/models/Accounts.model';
 import { CreatePollDto } from './dtos/CreatePollDto';
 
 @Injectable()
@@ -21,17 +12,20 @@ export class PollService {
     private readonly pollModel: Model<PollDocument>,
     @InjectModel(Options.name)
     private readonly optionModel: Model<OptionDocument>,
-    @InjectModel(Accounts.name)
-    private readonly accountModel: Model<AccountDocument>,
   ) {}
 
-  async createPoll(user: Accounts, data: CreatePollDto) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
+  async createPoll(data: CreatePollDto) {
     const poll = await this.pollModel.create(data);
 
     return poll;
+  }
+
+  async getAllPolls(query: Partial<CreatePollDto>) {
+    const polls = await this.pollModel.find({ ...query });
+
+    if (polls.length === 0) throw new NotFoundException('No Polls Found');
+
+    return polls;
   }
 
   async getActivePolls(query: Partial<CreatePollDto>) {
@@ -69,10 +63,7 @@ export class PollService {
     return { poll, options };
   }
 
-  async editPoll(user: Accounts, pollId: string, data: Partial<CreatePollDto>) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
+  async editPoll(pollId: string, data: Partial<CreatePollDto>) {
     if (!(await this.pollModel.findById(pollId)))
       throw new NotFoundException('Poll Not Found');
 
@@ -83,10 +74,7 @@ export class PollService {
     return poll;
   }
 
-  async deletePoll(user: Accounts, pollId: string) {
-    if (user.role !== Role.ADMIN)
-      throw new UnauthorizedException('Unauthorized Operation');
-
+  async deletePoll(pollId: string) {
     if (!(await this.pollModel.findById(pollId)))
       throw new NotFoundException('Poll Not Found');
 

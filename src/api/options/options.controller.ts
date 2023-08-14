@@ -17,13 +17,12 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Options } from 'src/database/models/Options.model';
-import { Accounts } from 'src/database/models/Accounts.model';
-import { AuthUser } from 'src/decorators/auth';
 import { APIResponse } from 'src/types/APIResponse';
 import { CreatePollOptionsDto, UpdateOptionDto } from './dtos/CreateOptionDto';
 import { GetSinglePollOptionDto } from './dtos/GetOptionDto';
 import { OptionService } from './options.service';
 import { GetSinglePollDto } from '../polls/dtos/GetPollDto';
+import { RequiresAdminRole } from 'src/decorators/auth';
 
 @ApiBadRequestResponse({
   description: 'Bad request Response',
@@ -43,16 +42,12 @@ export class OptionController {
     summary: 'Add Poll Options',
   })
   @Post(':id/option')
+  // @RequiresAdminRole()
   async createPollOptions(
-    @AuthUser() user: Accounts,
     @Param() param: GetSinglePollDto,
     @Body() body: CreatePollOptionsDto,
   ): Promise<APIResponse<Array<Options>>> {
-    const option = await this.optionService.createPollOptions(
-      user,
-      param,
-      body,
-    );
+    const option = await this.optionService.createPollOptions(param, body);
 
     return new APIResponse<Array<Options>>(option);
   }
@@ -62,7 +57,6 @@ export class OptionController {
   })
   @Get(':id/option')
   async getPollOptions(
-    @AuthUser() user: Accounts,
     @Param() param: GetSinglePollDto,
   ): Promise<APIResponse<Array<Options>>> {
     const options = await this.optionService.getPollOptions(param);
@@ -86,16 +80,12 @@ export class OptionController {
     summary: 'Edit Poll Options',
   })
   @Put(':id/option/:optionId')
+  // @RequiresAdminRole()
   async updatePollOptions(
     @Body() body: UpdateOptionDto,
     @Param() param: GetSinglePollOptionDto,
-    @AuthUser() user: Accounts,
   ): Promise<APIResponse<Options>> {
-    const option = await this.optionService.updatePollOptions(
-      user,
-      param,
-      body,
-    );
+    const option = await this.optionService.updatePollOptions(param, body);
 
     return new APIResponse<Options>(option);
   }
@@ -104,11 +94,11 @@ export class OptionController {
     summary: 'Delete Single Poll Option',
   })
   @Delete(':id/option/:optionId')
+  // @RequiresAdminRole()
   async deletePollOptions(
-    @AuthUser() user: Accounts,
     @Param() param: GetSinglePollOptionDto,
   ): Promise<APIResponse<Options>> {
-    const option = await this.optionService.deletePollOption(user, param);
+    const option = await this.optionService.deletePollOption(param);
 
     return new APIResponse<Options>(option);
   }

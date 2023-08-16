@@ -38,7 +38,7 @@ export class VoteService {
       )
       .populate({ path: 'contestant', select: '-password' });
 
-    const text = `${user.firstName} voted ${option.contestant.firstName}`;
+    const text = `${user.firstName} voted ${option.contestant}`;
     this.eventEmitter.emit('vote.new', text);
     return option;
   }

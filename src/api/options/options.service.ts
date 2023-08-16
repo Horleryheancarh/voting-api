@@ -44,9 +44,7 @@ export class OptionService {
   }
 
   async getPollOptions(param: GetSinglePollDto) {
-    const options = await this.optionModel
-      .find({ pollId: param.id })
-      .populate({ path: 'contestant', select: '-password' });
+    const options = await this.optionModel.find({ pollId: param.id });
 
     if (options.length === 0)
       throw new NotFoundException('No Contestant Found for the Poll');
@@ -55,9 +53,7 @@ export class OptionService {
   }
 
   async getSinglePollOption(param: GetSinglePollOptionDto) {
-    const option = await this.optionModel
-      .findById(param.optionId)
-      .populate({ path: 'contestant', select: '-password' });
+    const option = await this.optionModel.findById(param.optionId);
 
     if (!option) throw new NotFoundException('Contestant not Found');
 

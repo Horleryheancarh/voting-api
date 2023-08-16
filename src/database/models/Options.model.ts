@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { Polls } from './Polls.model';
-import { Accounts } from './Accounts.model';
 
 export type OptionDocument = Options & Document;
 
@@ -15,8 +14,8 @@ export class Options {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Polls' })
   pollId: Polls;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Accounts' })
-  contestant: Accounts;
+  @Prop({ type: String })
+  contestant: string;
 
   @Prop({ type: Number, default: 0 })
   voteCount: number;

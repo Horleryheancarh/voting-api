@@ -1,14 +1,14 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsMongoId, IsArray, ValidateNested } from 'class-validator';
+import { IsArray, ValidateNested, IsString } from 'class-validator';
 
 export class OptionDto {
   @ApiProperty({
     required: true,
-    description: 'Contestant UserId',
+    description: 'Contestant Name',
     example: '',
   })
-  @IsMongoId()
+  @IsString()
   contestant: string;
 
   @ApiProperty({

@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, ValidateNested, IsString } from 'class-validator';
+import { IsArray, ValidateNested, IsString, IsAlpha } from 'class-validator';
 
 export class OptionDto {
   @ApiProperty({
@@ -16,6 +16,7 @@ export class OptionDto {
     description: 'Party or Philosophy',
     example: '',
   })
+  @IsString()
   optionText: string;
 }
 

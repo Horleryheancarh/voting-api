@@ -8,13 +8,13 @@ export type OptionDocument = Options & Document;
   timestamps: true,
 })
 export class Options {
-  @Prop({ type: String })
+  @Prop({ required: true })
   optionText: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Polls' })
   pollId: Polls;
 
-  @Prop({ type: String })
+  @Prop({ required: true })
   contestant: string;
 
   @Prop({ type: Number, default: 0 })

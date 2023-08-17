@@ -8,11 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { v4 } from 'uuid';
-import {
-  Accounts,
-  AccountDocument,
-  Role,
-} from 'src/database/models/Accounts.model';
+import { Accounts, AccountDocument } from 'src/database/models/Accounts.model';
+import { Role } from 'src/constants/metadata';
 import {
   ITokenPurpose,
   TokenDocument,
@@ -141,14 +138,14 @@ export class AccountService {
     return 'Username does not exist';
   }
 
-  async makeAdmin(usernameDto: UsernameDto, role: Role): Promise<string> {
+  async makeAdmin(usernameDto: UsernameDto): Promise<string> {
     const account = await this.accountModel.findOne({
       username: usernameDto.username,
     });
 
     if (!account) throw new NotFoundException('Account not Found');
 
-    await account.updateOne({ role: Role.ADMIN });
+    await account.updateOne({ role: Role.USER });
 
     return 'Made User Admin';
   }

@@ -22,8 +22,7 @@ import { CreatePollDto, UpdatePollDto } from './dtos/CreatePollDto';
 import { Polls } from 'src/database/models/Polls.model';
 import { APIResponse } from 'src/types/APIResponse';
 import { GetSinglePollDto } from './dtos/GetPollDto';
-import { AuthUser, RequiresAdminRole } from 'src/decorators/auth';
-import { Accounts } from 'src/database/models/Accounts.model';
+import { RequiresAdminRole } from 'src/decorators/auth';
 
 @ApiBadRequestResponse({
   description: 'Bad request Response',
@@ -43,7 +42,7 @@ export class PollController {
     summary: 'Create New Poll',
   })
   @Post()
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async createPoll(@Body() body: CreatePollDto): Promise<APIResponse<Polls>> {
     const poll = await this.pollService.createPoll(body);
 
@@ -66,7 +65,7 @@ export class PollController {
     summary: 'Update Poll',
   })
   @Put(':id')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async updatePoll(
     @Param() param: GetSinglePollDto,
     @Body() body: UpdatePollDto,
@@ -104,7 +103,7 @@ export class PollController {
     summary: 'Get single poll and its options',
   })
   @Get(':id')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async getSinglePoll(
     @Param() param: GetSinglePollDto,
   ): Promise<APIResponse<object>> {
@@ -117,7 +116,7 @@ export class PollController {
     summary: 'Get single poll and its options',
   })
   @Delete(':id')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async deleteSinglePoll(
     @Param() param: GetSinglePollDto,
   ): Promise<APIResponse<string>> {

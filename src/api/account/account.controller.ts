@@ -103,9 +103,8 @@ export class AccountController {
   @RequiresAdminRole()
   async makeAdmin(
     @Param() usernameDto: UsernameDto,
-    @AuthUser() user: Accounts,
   ): Promise<APIResponse<string>> {
-    const status = await this.accountService.makeAdmin(usernameDto, user.role);
+    const status = await this.accountService.makeAdmin(usernameDto);
 
     return new APIResponse<string>(status);
   }

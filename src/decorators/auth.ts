@@ -3,8 +3,7 @@ import {
   ExecutionContext,
   SetMetadata,
 } from '@nestjs/common';
-import { IS_PUBLIC_KEY, ROLES } from 'src/constants/metadata';
-import { Role } from 'src/database/models/Accounts.model';
+import { IS_PUBLIC_KEY, ROLES, Role } from 'src/constants/metadata';
 
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 export const RequireRoles = (...roles: string[]) => SetMetadata(ROLES, roles);

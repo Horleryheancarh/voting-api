@@ -42,7 +42,7 @@ export class OptionController {
     summary: 'Add Poll Options',
   })
   @Post(':id/option')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async createPollOptions(
     @Param() param: GetSinglePollDto,
     @Body() body: CreatePollOptionsDto,
@@ -80,7 +80,7 @@ export class OptionController {
     summary: 'Edit Poll Options',
   })
   @Put(':id/option/:optionId')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async updatePollOptions(
     @Body() body: UpdateOptionDto,
     @Param() param: GetSinglePollOptionDto,
@@ -94,7 +94,7 @@ export class OptionController {
     summary: 'Delete Single Poll Option',
   })
   @Delete(':id/option/:optionId')
-  // @RequiresAdminRole()
+  @RequiresAdminRole()
   async deletePollOptions(
     @Param() param: GetSinglePollOptionDto,
   ): Promise<APIResponse<Options>> {

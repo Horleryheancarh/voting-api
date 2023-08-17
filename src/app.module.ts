@@ -2,7 +2,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './api/auth/auth.module';
-import { JwtAuthGuard } from './api/auth/jwt.auth.guard';
+import { AuthGuard } from './api/auth/auth.auth.guard';
 import { HealthModule } from './api/health/health.module';
 import { AccountModule } from './api/account/account.module';
 import { PollModule } from './api/polls/polls.module';
@@ -25,7 +25,7 @@ import { VoteModule } from './api/vote/vote.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: AuthGuard,
     },
   ],
 })

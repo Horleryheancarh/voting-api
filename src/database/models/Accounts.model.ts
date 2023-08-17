@@ -1,12 +1,8 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Role } from 'src/constants/metadata';
 
 export type AccountDocument = Accounts & Document;
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
-}
 
 @Schema({
   timestamps: true,

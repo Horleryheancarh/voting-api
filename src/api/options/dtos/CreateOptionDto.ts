@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, ValidateNested, IsString, IsAlpha } from 'class-validator';
+import { IsArray, ValidateNested, IsString } from 'class-validator';
 
 export class OptionDto {
   @ApiProperty({

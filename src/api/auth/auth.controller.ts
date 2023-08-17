@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, UsePipes } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,

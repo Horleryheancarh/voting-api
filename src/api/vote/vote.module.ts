@@ -5,6 +5,7 @@ import { OptionModel, Options } from 'src/database/models/Options.model';
 import { VoteController } from './vote.controller';
 import { VoteService } from './vote.service';
 import { VoteGateway } from './vote.gateway';
+import { PollModel, Polls } from 'src/database/models/Polls.model';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { VoteGateway } from './vote.gateway';
       {
         name: Options.name,
         schema: OptionModel,
+      },
+      {
+        name: Polls.name,
+        schema: PollModel,
       },
     ]),
   ],
